@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的书稿写作本</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;font-family:"Microsoft Yahei",sans-serif}
+        body{background:#f7f5f2;padding:20px;max-width:1100px;margin:0 auto}
+        .header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+        h1{font-size:24px;color:#333}
+        #dateText{color:#666}
+        textarea{width:100%;min-height:70vh;padding:16px;font-size:17px;line-height:1.7;border:1px solid #ddd;border-radius:8px;resize:vertical;background:#fff}
+        .btn-group{margin-top:12px;gap:10px;display:flex}
+        button{padding:8px 16px;border:none;border-radius:6px;background:#4466aa;color:white;cursor:pointer;font-size:15px}
+        button#export{background:#339966}
+        button#clear{background:#bb4444}
+        .tip{margin-top:10px;color:#777;font-size:14px}
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>书稿写作</h1>
+        <div id="dateText"></div>
+    </div>
+    <textarea id="bookInput" placeholder="在这里写书，每天写的内容会自动保存。
+建议定期点【导出文本】备份到电脑，防止浏览器数据丢失！"></textarea>
+    <div class="btn-group">
+        <button id="saveBtn">手动保存</button>
+        <button id="export">导出全部文字（备份）</button>
+        <button id="clear">清空内容（谨慎！）</button>
+    </div>
+    <div class="tip">💡 自动保存：每输入3秒自动存；内容存在当前浏览器。清理浏览器缓存会丢失文字，务必经常导出备份！</div>
+
+<script>
+    //显示日期
+    const dateDom = document.getElementById('dateText');
+    const now = new Date();
+    dateDom.innerText = now.toLocaleDateString()
+
+    const input = document.getElementById('bookInput');
+    //读取本地保存的书稿
+    if(localStorage.getItem('bookText')){
+        input.value = localStorage.getItem('bookText')
+    }
+
+    //自动保存 防抖
+    let timer;
+    input.oninput = ()=>{
+        clearTimeout(timer)
+        timer = setTimeout(()=>{
+            localStorage.setItem('bookText',input.value)
+        },3000)
+    }
+
+    document.getElementById('saveBtn').onclick = ()=>{
+        localStorage.setItem('bookText',input.value)
+        alert("✅ 保存成功")
+    }
+    //导出txt
+    document.getElementById('export').onclick = ()=>{
+        const blob = new Blob([input.value],{type:"text/plain"})
+        const url = URL.createObjectURL(blob)
+        const a = document.createElement('a')
+        a.href=url
+        a.download=`书稿_${new Date().toLocaleDateString()}.txt`
+        a.click()
+        URL.revokeObjectURL(url)
+    }
+    //清空
+    document.getElementById('clear').onclick = ()=>{
+        if(confirm("确定全部清空？删除后无法恢复！")){
+            input.value=""
+            localStorage.removeItem('bookText')
+        }
+    }
+</script>
+</body>
+</html>
