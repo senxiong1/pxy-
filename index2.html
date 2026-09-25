@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hello呀</title>
+    <title>给潘鑫莹的惊喜</title>
     <style>
         *{margin:0;padding:0;box-sizing:border-box}
         body{
@@ -59,22 +59,20 @@
 <body>
 <div class="box">
     <img id="photo">
-    <div class="tip-text">想不想知道这是什么？</div>
+    <div class="tip-text">要不要看看下张是什么？</div>
     <div class="btn-wrap">
-        <button id="btnSee">想</button>
-        <button id="btnNo">不想</button>
+        <button id="btnSee">看</button>
+        <button id="btnNo">不看</button>
     </div>
 </div>
 
 <script>
-// =========在这里替换图片链接！==========
 const photoList = [
-    "https://ibb.co/hFqtSnHD",
-    "https://ibb.co/fdFMCKzs",
-    "https://ibb.co/N6Cx6q8T",
-    "https://ibb.co/ZRVLHgSR",
-    "https://ibb.co/WQ9rgnd",
-    "https://ibb.co/hFqtSnHD",
+    "https://i.ibb.co/5hwGBPCW/screenshot-20260925-223913-com-ss-hm-ugc-aweme.jpg",
+    "https://i.ibb.co/Lh2vDgnx/screenshot-20260925-223907-com-ss-hm-ugc-aweme.jpg",
+    "https://i.ibb.co/B2VTSN1q/screenshot-20260925-223905-com-ss-hm-ugc-aweme.jpg",
+    "https://i.ibb.co/276Vbymy/screenshot-20260925-223903-com-ss-hm-ugc-aweme.jpg",
+    "https://i.ibb.co/whk0xH0g/screenshot-20260925-223852-com-ss-hm-ugc-aweme.jpg",
 ];
 let current = 0;
 const imgDom = document.getElementById('photo');
@@ -87,9 +85,24 @@ document.getElementById('btnNo').onclick = ()=>{
     alert("嘻嘻不看就算啦");
     setTimeout(()=>{
         current++;
-        if(current >= photoList.length) return;
-        imgDom.src = photoList[current];
+        //前4次小游戏，第4次结束自动轮播剩下图片
+        if(current === 4){
+            autoPlayRest();
+        }else if(current < photoList.length){
+            imgDom.src = photoList[current];
+        }
     },2000)
+}
+//自动连续播放剩余图片
+function autoPlayRest(){
+    const timer = setInterval(()=>{
+        current++;
+        if(current >= photoList.length){
+            clearInterval(timer);
+            return;
+        }
+        imgDom.src = photoList[current];
+    },1500);
 }
 </script>
 </body>
