@@ -3,70 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>给潘鑫莹的惊喜</title>
+    <title>潘鑫莹</title>
     <style>
-        *{margin:0;padding:0;box-sizing:border-box}
-        body{
-            min-height:100vh;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, sans-serif;
+        }
+        body {
+            min-height: 100vh;
             background: linear-gradient(135deg, #ffd6e0, #fff0f6);
-            font-family:system-ui,sans-serif;
-            display:flex;
-            flex-direction:column;
-            align-items:center;
-            justify-content:center;
-            padding:20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
         }
-        .box{
-            background:rgba(255,255,255,0.75);
-            border-radius:20px;
-            padding:24px;
-            text-align:center;
-            max-width:420px;
+        .page {
+            text-align: center;
         }
-        img{
-            max-width:100%;
-            max-height:380px;
-            border-radius:14px;
-            box-shadow:0 4px 16px #00000020;
+        .hide {
+            display: none !important;
         }
-        .tip-text{
+        .title-text {
+            font-size: 32px;
+            color: #444;
+            margin-bottom: 40px;
+        }
+        .btn-group {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+        button {
+            padding:12px 30px;
+            border: none;
+            border-radius: 30px;
             font-size:18px;
-            margin:16px 0;
-            color:#444;
+            cursor: pointer;
         }
-        .btn-wrap{
-            display:flex;
-            gap:16px;
-            justify-content:center;
-        }
-        button{
-            padding:10px 24px;
-            border:none;
-            border-radius:30px;
-            font-size:17px;
-            cursor:pointer;
-        }
-        #btnSee{
+        #btnKnow {
             background:#ff7b9c;
-            color:white;
+            color:#fff;
         }
-        #btnNo{
+        #btnNotKnow {
             background:#b886db;
-            color:white;
+            color:#fff;
+        }
+        .img-box {
+            max-width: 90%;
+        }
+        #photo {
+            max-width:100%;
+            max-height:420px;
+            border-radius:16px;
+            box-shadow:0 4px 18px rgba(0,0,0,0.15);
+            animation: flyIn 0.6s ease-out;
+        }
+        @keyframes flyIn {
+            from {
+                transform: translateY(80px);
+                opacity:0;
+            }
+            to {
+                transform: translateY(0);
+                opacity:1;
+            }
+        }
+        .pop-box {
+            margin-top:24px;
+            background:rgba(255,255,255,0.8);
+            padding:20px;
+            border-radius:20px;
+        }
+        .pop-text {
+            font-size:20px;
+            color:#444;
+            margin-bottom:20px;
         }
     </style>
 </head>
 <body>
-<div class="box">
-    <img id="photo">
-    <div class="tip-text">要不要看看下张是什么？</div>
-    <div class="btn-wrap">
-        <button id="btnSee">看</button>
-        <button id="btnNo">不看</button>
+<!-- 第一页：猜猜我要干嘛 -->
+<div id="startPage" class="page">
+    <div class="title-text">猜猜我要干嘛</div>
+    <div class="btn-group">
+        <button id="btnNotKnow">不知道</button>
+        <button id="btnKnow">知道</button>
+    </div>
+</div>
+
+<!-- 照片区域 -->
+<div id="photoPage" class="page hide">
+    <div class="img-box">
+        <img id="photo">
+    </div>
+    <div id="popWindow" class="pop-box hide">
+        <div class="pop-text">要不要看看下一张</div>
+        <div class="btn-group">
+            <button id="btnWant">要</button>
+            <button id="btnNotWant">不要</button>
+        </div>
     </div>
 </div>
 
 <script>
+// 图片链接
 const photoList = [
     "https://i.ibb.co/5hwGBPCW/screenshot-20260925-223913-com-ss-hm-ugc-aweme.jpg",
     "https://i.ibb.co/Lh2vDgnx/screenshot-20260925-223907-com-ss-hm-ugc-aweme.jpg",
@@ -74,35 +116,44 @@ const photoList = [
     "https://i.ibb.co/276Vbymy/screenshot-20260925-223903-com-ss-hm-ugc-aweme.jpg",
     "https://i.ibb.co/whk0xH0g/screenshot-20260925-223852-com-ss-hm-ugc-aweme.jpg",
 ];
-let current = 0;
-const imgDom = document.getElementById('photo');
-imgDom.src = photoList[current];
+let currentIndex = 0;
+const startPage = document.getElementById("startPage");
+const photoPage = document.getElementById("photoPage");
+const photoImg = document.getElementById("photo");
+const popWindow = document.getElementById("popWindow");
 
-document.getElementById('btnSee').onclick = ()=>{
-    alert("不给你看");
-}
-document.getElementById('btnNo').onclick = ()=>{
-    alert("嘻嘻不看就算啦");
+// 首页按钮
+document.getElementById("btnNotKnow").onclick = function(){
+    alert("不知道就别看了");
+};
+document.getElementById("btnKnow").onclick = function(){
+    alert("好的来咯");
+    startPage.classList.add("hide");
+    photoPage.classList.remove("hide");
+    showPhoto();
+};
+
+// 展示照片，2秒后弹出选择窗口
+function showPhoto(){
+    popWindow.classList.add("hide");
+    photoImg.src = photoList[currentIndex];
     setTimeout(()=>{
-        current++;
-        //前4次小游戏，第4次结束自动轮播剩下图片
-        if(current === 4){
-            autoPlayRest();
-        }else if(current < photoList.length){
-            imgDom.src = photoList[current];
-        }
-    },2000)
+        popWindow.classList.remove("hide");
+    },2000);
 }
-//自动连续播放剩余图片
-function autoPlayRest(){
-    const timer = setInterval(()=>{
-        current++;
-        if(current >= photoList.length){
-            clearInterval(timer);
-            return;
-        }
-        imgDom.src = photoList[current];
-    },1500);
+
+// 下一张按钮
+document.getElementById("btnWant").onclick = function(){
+    alert("不给你看");
+};
+document.getElementById("btnNotWant").onclick = function(){
+    alert("好的 女人不要就是要 来咯");
+    currentIndex++;
+    if(currentIndex >= photoList.length){
+        alert("没咯 滚吧❤️");
+        return;
+    }
+    showPhoto();
 }
 </script>
 </body>
