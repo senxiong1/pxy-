@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>给潘鑫莹的惊喜</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{
+            min-height:100vh;
+            background: linear-gradient(135deg, #ffd6e0, #fff0f6);
+            font-family:system-ui,sans-serif;
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            justify-content:center;
+            padding:20px;
+        }
+        .box{
+            background:rgba(255,255,255,0.75);
+            border-radius:20px;
+            padding:24px;
+            text-align:center;
+            max-width:420px;
+        }
+        img{
+            max-width:100%;
+            max-height:380px;
+            border-radius:14px;
+            box-shadow:0 4px 16px #00000020;
+        }
+        .tip-text{
+            font-size:18px;
+            margin:16px 0;
+            color:#444;
+        }
+        .btn-wrap{
+            display:flex;
+            gap:16px;
+            justify-content:center;
+        }
+        button{
+            padding:10px 24px;
+            border:none;
+            border-radius:30px;
+            font-size:17px;
+            cursor:pointer;
+        }
+        #btnSee{
+            background:#ff7b9c;
+            color:white;
+        }
+        #btnNo{
+            background:#b886db;
+            color:white;
+        }
+    </style>
+</head>
+<body>
+<div class="box">
+    <img id="photo">
+    <div class="tip-text">要不要看看下张是什么？</div>
+    <div class="btn-wrap">
+        <button id="btnSee">看</button>
+        <button id="btnNo">不看</button>
+    </div>
+</div>
+
+<script>
+// =========在这里替换图片链接！==========
+const photoList = [
+    "这里粘贴第一张图片在线链接",
+    "这里粘贴第二张图片在线链接",
+    "这里粘贴第三张图片在线链接",
+    "这里粘贴第四张图片在线链接",
+    "这里粘贴第五张图片在线链接",
+    "这里粘贴第六张图片在线链接",
+];
+let current = 0;
+const imgDom = document.getElementById('photo');
+imgDom.src = photoList[current];
+
+document.getElementById('btnSee').onclick = ()=>{
+    alert("不给你看");
+}
+document.getElementById('btnNo').onclick = ()=>{
+    alert("嘻嘻不看就算啦");
+    setTimeout(()=>{
+        current++;
+        if(current >= photoList.length) return;
+        imgDom.src = photoList[current];
+    },2000)
+}
+</script>
+</body>
+</html>
