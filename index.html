@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的书稿写作本</title>
+    <title>潘鑫莹变形计--熊森 著</title>
     <style>
         *{margin:0;padding:0;box-sizing:border-box}
         body{background:#f7f5f2;padding:20px;font-family:system-ui,sans-serif}
@@ -17,48 +17,47 @@
 </head>
 <body>
 <div class="container">
-    <h1>我的书稿写作本</h1>
+    <h1>潘鑫莹变形计--熊森 著</h1>
     <div class="btn-group">
         <button id="exportBtn">导出TXT备份</button>
         <button id="shareBtn">生成分享链接</button>
     </div>
     <textarea id="content"></textarea>
-    <div class="tip">自动保存（保存在本机浏览器）｜分享链接会把文字放在网址里，发给好友即可直接查看</div>
+    <div class="tip">仅潘鑫莹可见 希望你能多看看 都是为了你好 加油 致最漂亮的潘鑫莹</div>
 </div>
 
 <script>
 const textarea = document.getElementById('content');
 const storageKey = 'bookText';
 
-// 读取URL里面携带的文字，如果有就加载
+//读取网址附带文字
 const urlParams = new URLSearchParams(window.location.search);
 const shareText = urlParams.get('txt');
 if(shareText){
     textarea.value = decodeURIComponent(shareText);
-} else {
-    // 没有分享参数，读取本地保存的内容
+}else{
     textarea.value = localStorage.getItem(storageKey) || '';
 }
 
-// 自动保存到本地
+//本地自动保存
 let timer;
 textarea.addEventListener('input',()=>{
     clearTimeout(timer);
     timer = setTimeout(()=>{
         localStorage.setItem(storageKey, textarea.value);
-    }, 3000);
+    },3000);
 })
 
-// 导出txt文件
+//导出TXT
 document.getElementById('exportBtn').onclick = ()=>{
-    const blob = new Blob([textarea.value], {type:'text/plain'});
+    const blob = new Blob([textarea.value],{type:'text/plain'});
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = '书稿.txt';
+    a.download = '潘鑫莹变形计--熊森 著.txt';
     a.click();
 }
 
-// 生成分享链接
+//生成分享链接
 document.getElementById('shareBtn').onclick = ()=>{
     const text = textarea.value.trim();
     if(!text){
@@ -68,9 +67,9 @@ document.getElementById('shareBtn').onclick = ()=>{
     const encoded = encodeURIComponent(text);
     const shareUrl = `${location.origin}${location.pathname}?txt=${encoded}`;
     navigator.clipboard.writeText(shareUrl).then(()=>{
-        alert('分享链接已复制！直接发给朋友，点开就能看到这段文字');
+        alert('分享链接已经复制！发给对方打开就能看到文字');
     }).catch(()=>{
-        prompt('复制下面这个分享链接：', shareUrl);
+        prompt('手动复制链接',shareUrl);
     })
 }
 </script>
